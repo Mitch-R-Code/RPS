@@ -89,6 +89,7 @@ struct ContentView: View {
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
             if countdown > 1 {
                 countdown -= 1
+                SoundManager.shared.playCountdown()
             } else {
                 showGo = true
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
@@ -104,6 +105,7 @@ struct ContentView: View {
         if selectedOption == nil {
             selectedOption = GameOption.allCases.randomElement()
         }
+        SoundManager.shared.playReveal()
         gameState = .result
     }
     

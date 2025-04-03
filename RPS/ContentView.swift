@@ -29,6 +29,15 @@ struct ContentView: View {
         case scissors = "Scissors"
     }
     
+    private var countdownText: String {
+        switch countdown {
+        case 3: return "Rock"
+        case 2: return "Paper"
+        case 1: return "Scissors"
+        default: return ""
+        }
+    }
+    
     var body: some View {
         ZStack {
             Color.black.edgesIgnoringSafeArea(.all)
@@ -57,7 +66,7 @@ struct ContentView: View {
                             .animation(.spring(response: 0.3, dampingFraction: 0.6), value: countdownScale)
                             .sensoryFeedback(.success, trigger: showGo)
                     } else {
-                        Text("\(countdown)...")
+                        Text(countdownText)
                             .font(.system(size: 100, weight: .bold))
                             .foregroundColor(.white)
                             .scaleEffect(countdownScale)
@@ -102,7 +111,7 @@ struct ContentView: View {
         showGo = false
         selectedOption = nil
         
-        // Animate the countdown number
+        // Animate the countdown text
         withAnimation {
             countdownScale = 1.5
         }
@@ -114,14 +123,14 @@ struct ContentView: View {
         
         timer?.invalidate()
         
-        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
+        timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { timer in
             if countdown > 1 {
                 countdown -= 1
                 
                 // Play countdown sound
                 SoundManager.shared.playCountdown()
                 
-                // Animate the countdown number
+                // Animate the countdown text
                 withAnimation {
                     countdownScale = 1.5
                 }
@@ -146,7 +155,7 @@ struct ContentView: View {
                     }
                 }
                 
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     timer.invalidate()
                     self.timer = nil
                     showResult()
